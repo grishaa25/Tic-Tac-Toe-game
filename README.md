@@ -47,6 +47,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 - This game was created as a simple network programming exercise.
-- Special thanks to the Python documentation and tutorials for network programming.
-
-
+  
