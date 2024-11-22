@@ -3,18 +3,16 @@ import threading
 
 # Initialize the game board
 board = [' ' for _ in range(9)]
-current_turn = 'X'  # Player 1 starts as X
+current_turn = 'X'  
 game_over = False
 lock = threading.Lock()
 
-# Function to print the board (for server-side)
 def print_board():
     for i in range(3):
         print(board[i*3] + '|' + board[i*3+1] + '|' + board[i*3+2])
         if i < 2:
             print('-----')
 
-# Function to check if there's a winner
 def check_winner():
     winning_combinations = [(0, 1, 2), (3, 4, 5), (6, 7, 8),  # Rows
                             (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Columns
@@ -28,7 +26,6 @@ def check_winner():
 def check_draw():
     return ' ' not in board
 
-# Function to handle each player connection
 def handle_client(conn, player_symbol):
     global current_turn, game_over
     conn.send(f'Welcome Player {player_symbol}!'.encode())
@@ -49,8 +46,6 @@ def handle_client(conn, player_symbol):
 
                 board[move] = player_symbol
                 current_turn = 'O' if player_symbol == 'X' else 'X'
-
-                # Send updated board to both clients
                 update_board()
 
                 # Check for a winner or draw
@@ -65,8 +60,6 @@ def handle_client(conn, player_symbol):
                     update_board()
                     conn.send('It\'s a draw!'.encode())
                     break
-
-# Function to send the current board to both clients
 def update_board():
     board_state = ''.join(board)
     for conn in clients:
@@ -87,11 +80,9 @@ def start_server():
         clients.append(conn)
         print(f'Player {len(clients)} connected from {addr}')
 
-    # Start the game for both players
     threading.Thread(target=handle_client, args=(clients[0], 'X')).start()
     threading.Thread(target=handle_client, args=(clients[1], 'O')).start()
 
-# Corrected __name__ block
 if __name__ == '__main__':
     start_server()
     
