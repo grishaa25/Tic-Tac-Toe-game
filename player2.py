@@ -12,23 +12,20 @@ def start_client():
 
     while True:
         try:
-            # Receive message from server
+
             message = client.recv(1024).decode()
 
-            if len(message) == 9:  # If it's a board update (9 characters for 3x3 board)
+            if len(message) == 9:  
                 print_board(message)
             else:
                 print(message)
 
-            # Send move to the server if prompted
             if 'Your turn' in message:
                 move = input('Enter position (0-8): ')
                 client.send(move.encode())
         except ConnectionAbortedError:
             print("Game over.")
             break
-
-# Corrected __name__ block
 if __name__ == '__main__':
     start_client()
 
